@@ -8,6 +8,7 @@ export default function ArticlePage({ params }) {
     if (!newsItem) {
         return notFound();
     }
+
     return (
         <article className="news-article">
             <header>
