@@ -10,7 +10,7 @@ export default function ImagePage({ params }) {
     }
 
     return (
-        <div className="fillscreen-image">
+        <div className="fullscreen-image">
             <img src={`/images/news/${newsItem.image}`} alt={newsItem.title}/>
         </div>
     )
