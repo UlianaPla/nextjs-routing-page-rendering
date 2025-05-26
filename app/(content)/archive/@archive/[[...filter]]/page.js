@@ -2,20 +2,20 @@ import Link from "next/link";
 import NewsList from "@/components/news-list";
 import { getNewsForYear, getAvailableNewsYears, getNewsForYearAndMonth, getAvailableNewsMonths } from '@/lib/news';
 
-export default function FilteredNewsPage({ params }) {
+export default async function FilteredNewsPage({ params }) {
     const filter = params.filter;
 
     const selectedYear = filter?.[0];
     const selectedMonth = filter?.[1];
 
     let news;
-    let links = getAvailableNewsYears();
+    let links = await getAvailableNewsYears();
 
     if (selectedYear && !selectedMonth) {
-        news = getNewsForYear(selectedYear);
+        news = await getNewsForYear(selectedYear);
         links = getAvailableNewsMonths(selectedYear);
     } else if (selectedYear && selectedMonth) {
-        news = getNewsForYearAndMonth(selectedYear, selectedMonth);
+        news = await getNewsForYearAndMonth(selectedYear, selectedMonth);
         links = [];
     }
 
@@ -25,8 +25,10 @@ export default function FilteredNewsPage({ params }) {
         newsContent = <NewsList news={news} />
     }
 
-    if ((selectedYear && !getAvailableNewsYears().includes(+selectedYear)) ||
-        (selectedMonth && !getAvailableNewsMonths().includes(+selectedMonth))) {
+    const availableYears = await getAvailableNewsYears();
+
+    if ((selectedYear && !availableYears.includes(selectedYear)) ||
+        (selectedMonth && !getAvailableNewsMonths(selectedYear).includes(selectedMonth))) {
         throw new Error('Invalid filter.')
     }
 
